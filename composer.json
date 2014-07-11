@@ -1,0 +1,35 @@
+{
+    "name":"Reynholm/FileUtils",
+    "description":"A set of utils for working with files easily",
+    "keywords":["file", "utils", "conversor"],
+    "homepage":"http://www.programeme.com",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"Carlos Goce",
+            "email":"carlosgoce@gmail.com",
+            "homepage":"http://www.carlosgoce.com"
+        },
+        {
+            "name":"Carlos Morales",
+            "email":"carlos@cmorales.es",
+            "homepage":"http://www.cmorales.es"
+        }
+    ],
+    "minimum-stability": "stable",
+
+    "require": {
+        "php": ">=5.2"
+    },
+    "require-dev": {
+        "codeception/codeception": "2.0.2",
+        "codeception/specify": "dev-master",
+        "codeception/verify": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    }
+}
