@@ -22,6 +22,12 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
         array('030',    'PRODUCT 3', 'BRAND 3', '1301518', 'AGOTADO')
     );
 
+    protected $expectedArrayWithTitlesAsKeys = array(
+        array('CODIGO' => '100', 'NOMBRE' => 'PRODUCT 1', 'MARCA' => 'BRAND 1', 'MEDIDA' => '1207017', 'STOCK' => 'BAJO'),
+        array('CODIGO' => '200', 'NOMBRE' => 'PRODUCT 2', 'MARCA' => 'BRAND 2', 'MEDIDA' => '1208017', 'STOCK' => 'ALTO'),
+        array('CODIGO' => '030', 'NOMBRE' => 'PRODUCT 3', 'MARCA' => 'BRAND 3', 'MEDIDA' => '1301518', 'STOCK' => 'AGOTADO'),
+    );
+
     protected $expectedArrayWithoutTitles = array(
         array('100',    'PRODUCT 1', 'BRAND 1', '1207017', 'BAJO'),
         array('200',    'PRODUCT 2', 'BRAND 2', '1208017', 'ALTO'),
@@ -62,11 +68,26 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
             expect($result)->equals($this->expectedArrayWithoutTwoFirstRows);
         });
 
+    }
+
+    public function testCsvIsParsedToArrayWithCommaDelimeter() {
+
         $this->specify("Can convert to array chaging the delimiter character", function() {
             $this->csvConversor->setDelimiter(",");
 
             $result = $this->csvConversor->toArray($this->fileDelimitedWithCommaPath);
             expect($result)->equals($this->expectedArrayWithTitles);
+        });
+
+    }
+
+    public function testCsvIsParsedWithFirstRowAsKeys() {
+
+        $this->specify("Sets the first row as the array keys", function() {
+            $this->csvConversor->setFirstRowAsKeys(true);
+
+            $result = $this->csvConversor->toArray($this->filePath);
+            expect($result)->equals($this->expectedArrayWithTitlesAsKeys);
         });
 
     }

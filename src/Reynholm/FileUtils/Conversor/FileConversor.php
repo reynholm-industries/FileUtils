@@ -13,4 +13,11 @@ interface FileConversor {
      * @return  array
      */
     public function toArray($filePath, $skipRows = 0);
+
+    /**
+     * Set if the conversion should use the first row as the keys
+     * @param $boolean
+     * @return void
+     */
+    public function setFirstRowAsKeys($boolean);
 } 
