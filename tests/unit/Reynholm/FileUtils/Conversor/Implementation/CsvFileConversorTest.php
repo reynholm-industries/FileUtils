@@ -12,6 +12,8 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
     use Codeception\Specify;
 
     protected $csvConversor;
+    protected $filePath;
+    protected $fileDelimitedWithCommaPath;
 
     protected $expectedArrayWithTitles = array(
         array('CODIGO', 'NOMBRE',    'MARCA',   'MEDIDA',  'STOCK'),
@@ -31,13 +33,12 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
         array('030',    'PRODUCT 3', 'BRAND 3', '1301518', 'AGOTADO')
     );
 
-    protected $filePath;
-
     protected function _before()
     {
         $this->csvConversor = new CsvFileConversor();
 
         $this->filePath = getResourcePath('productStock.csv');
+        $this->fileDelimitedWithCommaPath = getResourcePath('productStockDelimitedByComma.csv');
     }
 
     protected function _after()
@@ -59,6 +60,13 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
 
             $result = $this->csvConversor->toArray($this->filePath, 2);
             expect($result)->equals($this->expectedArrayWithoutTwoFirstRows);
+        });
+
+        $this->specify("Can convert to array chaging the delimiter character", function() {
+            $this->csvConversor->setDelimiter(",");
+
+            $result = $this->csvConversor->toArray($this->fileDelimitedWithCommaPath);
+            expect($result)->equals($this->expectedArrayWithTitles);
         });
 
     }
