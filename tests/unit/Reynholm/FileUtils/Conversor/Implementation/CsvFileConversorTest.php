@@ -1,19 +1,26 @@
 <?php
 
+namespace unit\Reynholm\FileUtils\Conversor\Implementation;
+
+use Codeception\Specify;
+use Codeception\TestCase\Test;
+use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
 
 /**
  * Class CsvFileConversorTest
  * @property CsvFileConversor $csvConversor
  * @property string $filePath
+ * @property \PHPExcel_Reader_Excel5 $excelReader
  */
-class CsvFileConversorTest extends \Codeception\TestCase\Test
+class CsvFileConversorTest extends Test
 {
-    use Codeception\Specify;
+    use Specify;
 
     protected $csvConversor;
     protected $filePath;
     protected $fileDelimitedWithCommaPath;
+    protected $excelReader;
 
     protected $expectedArrayWithTitles = array(
         array('CODIGO', 'NOMBRE',    'MARCA',   'MEDIDA',  'STOCK'),
@@ -45,6 +52,7 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
 
         $this->filePath = getResourcePath('productStock.csv');
         $this->fileDelimitedWithCommaPath = getResourcePath('productStockDelimitedByComma.csv');
+        $this->excelReader = PHPExcel_IOFactory::createReader('Excel5');
     }
 
     protected function _after()
@@ -90,6 +98,15 @@ class CsvFileConversorTest extends \Codeception\TestCase\Test
             expect($result)->equals($this->expectedArrayWithTitlesAsKeys);
         });
 
+    }
+
+    public function testCsvIsParsedToXls()
+    {
+        $this->specify("Can convert to XLS", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $result = $this->csvConversor->toXls($this->filePath, $temporaryFile);
+            expect_that($this->excelReader->canRead($result));
+        });
     }
 
 }

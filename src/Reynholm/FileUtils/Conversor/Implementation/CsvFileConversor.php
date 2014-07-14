@@ -2,6 +2,7 @@
 
 namespace Reynholm\FileUtils\Conversor\Implementation;
 
+use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\FileConversor;
 
 class CsvFileConversor implements FileConversor {
@@ -32,6 +33,8 @@ class CsvFileConversor implements FileConversor {
     {
         $this->firstRowAsKeys = $boolean;
     }
+
+
 
     /**
      * Converts a file to an array
@@ -68,5 +71,39 @@ class CsvFileConversor implements FileConversor {
         fclose($handle);
 
         return array_slice($data, $skipRows);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $destinationPath
+     * @return string
+     */
+    public function toXls($filePath, $destinationPath)
+    {
+        $objReader = $this->getReader('CSV');
+        $objReader->setDelimiter($this->getDelimiter());
+
+        $objPHPExcel = $objReader->load($filePath);
+        $objWriter = $this->getWriter($objPHPExcel, 'Excel5');
+        $objWriter->save($destinationPath);
+
+        return $destinationPath;
+    }
+
+    /**
+     * @param string $type
+     * @return \PHPExcel_Reader_IReader
+     */
+    protected function getReader($type) {
+        return PHPExcel_IOFactory::createReader($type);
+    }
+
+    /**
+     * @param $objPHPExcel
+     * @param $format
+     * @return \PHPExcel_Writer_IWriter
+     */
+    protected function getWriter($objPHPExcel, $format) {
+        return PHPExcel_IOFactory::createWriter($objPHPExcel, $format);
     }
 }

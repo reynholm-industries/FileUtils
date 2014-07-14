@@ -20,7 +20,8 @@
     "minimum-stability": "stable",
 
     "require": {
-        "php": ">=5.2"
+        "php": ">=5.2",
+        "phpoffice/phpexcel": "1.8.0"
     },
     "require-dev": {
         "codeception/codeception": "2.0.2",

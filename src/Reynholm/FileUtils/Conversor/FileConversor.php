@@ -5,11 +5,16 @@ namespace Reynholm\FileUtils\Conversor;
 interface FileConversor {
 
     /**
-     * Convierte un archivo en un array.
-     * Opcionalmente permite saltarse alguna de las primeras filas
-     * como podrían ser los títulos o líneas en blanco
-     * @param   $filePath
-     * @param   integer $skipRows
+     * @param string $filePath
+     * @param string $destinationPath
+     * @return string
+     */
+    public function toXls($filePath, $destinationPath);
+
+    /**
+     * Converts a file into an array
+     * @param   string $filePath
+     * @param   integer $skipRows Number of rows to skip
      * @return  array
      */
     public function toArray($filePath, $skipRows = 0);
