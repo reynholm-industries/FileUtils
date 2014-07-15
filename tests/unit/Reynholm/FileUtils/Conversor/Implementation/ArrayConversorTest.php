@@ -62,6 +62,21 @@ class ArrayConversorTest extends Test
         });
     }
 
+    public function testCanBeConvertedToJson()
+    {
+        $this->specify("Can be converted to JSON", function() {
+            $input = array(1, 2, 3);
+            $result = $this->arrayConversor->toJson($input);
+
+            expect($result)->equals("[1,2,3]");
+
+            $input2 = array('key1' => 'value1', 'key2' => 2);
+            $result2 = $this->arrayConversor->toJson($input2);
+
+            expect($result2)->equals('{"key1":"value1","key2":2}');
+        });
+    }
+
     protected function getCsvAsArray($filePath) {
         return $this->csvConversor->toArray($filePath);
     }
