@@ -49,7 +49,7 @@ class ArrayConversor implements FileConversor {
      */
     public function toCsv($filePath, $destinationPath)
     {
-        $handle = fopen($destinationPath, 'rw');
+        $handle = fopen($destinationPath, 'w');
 
         foreach ($filePath as $row) {
             fputcsv($handle, $row, $this->getDelimiter(), '"');
