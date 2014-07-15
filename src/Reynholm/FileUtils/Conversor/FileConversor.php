@@ -12,6 +12,13 @@ interface FileConversor {
     public function toXls($filePath, $destinationPath);
 
     /**
+     * @param string|array $filePath or data
+     * @param string $destinationPath
+     * @return string
+     */
+    public function toCsv($filePath, $destinationPath);
+
+    /**
      * Converts a file into an array
      * @param   string $filePath
      * @param   integer $skipRows Number of rows to skip
@@ -25,4 +32,14 @@ interface FileConversor {
      * @return void
      */
     public function setFirstRowAsKeys($boolean);
+
+    /**
+     * @param string $delimiter
+     */
+    public function setDelimiter($delimiter);
+
+    /**
+     * @return string
+     */
+    public function getDelimiter();
 } 

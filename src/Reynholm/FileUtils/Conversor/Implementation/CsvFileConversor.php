@@ -106,4 +106,15 @@ class CsvFileConversor implements FileConversor {
     protected function getWriter($objPHPExcel, $format) {
         return PHPExcel_IOFactory::createWriter($objPHPExcel, $format);
     }
+
+    /**
+     * @param string $filePath
+     * @param string $destinationPath
+     * @throws \Exception
+     * @return string
+     */
+    public function toCsv($filePath, $destinationPath)
+    {
+        throw new \Exception('CSV can\'t be converted to CSV');
+    }
 }
