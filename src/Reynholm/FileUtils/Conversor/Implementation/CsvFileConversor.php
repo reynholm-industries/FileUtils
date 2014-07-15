@@ -4,9 +4,21 @@ namespace Reynholm\FileUtils\Conversor\Implementation;
 
 use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Arrayable;
+use Reynholm\FileUtils\Conversor\Jsonable;
 use Reynholm\FileUtils\Conversor\Xlsable;
 
-class CsvFileConversor implements Arrayable, Xlsable {
+/**
+ * Class CsvFileConversor
+ * @package Reynholm\FileUtils\Conversor\Implementation
+ * @property ArrayConversor $arrayConversor
+ */
+class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
+
+    protected $arrayConversor;
+
+    public function __construct(ArrayConversor $arrayConversor) {
+        $this->arrayConversor = $arrayConversor;
+    }
 
     /**
      * @param string $origin
@@ -79,4 +91,12 @@ class CsvFileConversor implements Arrayable, Xlsable {
         return PHPExcel_IOFactory::createWriter($objPHPExcel, $format);
     }
 
+    /**
+     * @param string|array $origin Depending on the implementation it could be an array or an origin folder
+     * @return string
+     */
+    public function toJson($origin)
+    {
+        return $this->arrayConversor->toJson( $this->toArray($origin, 0, true) );
+    }
 }

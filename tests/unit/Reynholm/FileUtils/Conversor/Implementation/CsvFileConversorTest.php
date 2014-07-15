@@ -5,6 +5,7 @@ namespace unit\Reynholm\FileUtils\Conversor\Implementation;
 use Codeception\Specify;
 use Codeception\TestCase\Test;
 use PHPExcel_IOFactory;
+use Reynholm\FileUtils\Conversor\Implementation\ArrayConversor;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
 
 /**
@@ -19,6 +20,7 @@ class CsvFileConversorTest extends Test
 
     protected $csvConversor;
     protected $filePath;
+    protected $simpleFilePath;
     protected $fileDelimitedWithCommaPath;
     protected $excelReader;
 
@@ -48,9 +50,10 @@ class CsvFileConversorTest extends Test
 
     protected function _before()
     {
-        $this->csvConversor = new CsvFileConversor();
+        $this->csvConversor = new CsvFileConversor( new ArrayConversor() );
 
-        $this->filePath = getResourcePath('productStock.csv');
+        $this->filePath       = getResourcePath('productStock.csv');
+        $this->simpleFilePath = getResourcePath('simpleCsvFile.csv');
         $this->fileDelimitedWithCommaPath = getResourcePath('productStockDelimitedByComma.csv');
         $this->excelReader = PHPExcel_IOFactory::createReader('Excel5');
     }
@@ -102,6 +105,14 @@ class CsvFileConversorTest extends Test
             $temporaryFile = tempnam('/temp', 'TMP');
             $result = $this->csvConversor->toXls($this->filePath, $temporaryFile);
             expect_that($this->excelReader->canRead($result));
+        });
+    }
+
+    public function testCsvIsConvertedToJson()
+    {
+        $this->specify("Can convert a CSV to Json", function() {
+            $result = $this->csvConversor->toJson($this->simpleFilePath);
+            expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
         });
     }
 

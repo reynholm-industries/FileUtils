@@ -31,8 +31,8 @@ class ArrayConversorTest extends Test
 
     protected function _before()
     {
-        $this->arrayConversor = new ArrayConversor(new \PHPExcel());
-        $this->csvConversor   = new CsvFileConversor();
+        $this->arrayConversor = new ArrayConversor();
+        $this->csvConversor   = new CsvFileConversor(new ArrayConversor());
         $this->excelReader = PHPExcel_IOFactory::createReader('Excel5');
     }
 
