@@ -4,6 +4,7 @@ namespace unit\Reynholm\FileUtils\Conversor\Implementation;
 
 use Codeception\Specify;
 use Codeception\TestCase\Test;
+use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Implementation\ArrayConversor;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
 
@@ -11,6 +12,7 @@ use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
  * Class ArrayConversorTest
  * @property ArrayConversor $arrayConversor
  * @property CsvFileConversor $csvConversor
+ * @property \PHPExcel_Reader_Excel5 $excelReader
  */
 class ArrayConversorTest extends Test
 {
@@ -18,6 +20,7 @@ class ArrayConversorTest extends Test
 
     protected $arrayConversor;
     protected $csvConversor;
+    protected $excelReader;
 
     protected $exampleArray = array(
         array('CODIGO', 'NOMBRE',    'MARCA',   'MEDIDA',  'STOCK'),
@@ -28,8 +31,9 @@ class ArrayConversorTest extends Test
 
     protected function _before()
     {
-        $this->arrayConversor = new ArrayConversor();
+        $this->arrayConversor = new ArrayConversor(new \PHPExcel());
         $this->csvConversor   = new CsvFileConversor();
+        $this->excelReader = PHPExcel_IOFactory::createReader('Excel5');
     }
 
     protected function _after()
@@ -47,6 +51,15 @@ class ArrayConversorTest extends Test
             expect($resultArray)->equals($this->exampleArray);
         });
 
+    }
+
+    public function testCanBeConvertedToXls()
+    {
+        $this->specify("Can convert an array to XLS", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $result = $this->arrayConversor->toXls(array('1', '2', '3'), $temporaryFile);
+            expect_that($this->excelReader->canRead($result));
+        });
     }
 
     protected function getCsvAsArray($filePath) {
