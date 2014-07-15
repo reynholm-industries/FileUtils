@@ -2,57 +2,23 @@
 
 namespace Reynholm\FileUtils\Conversor\Implementation;
 
-use Reynholm\FileUtils\Conversor\FileConversor;
+use Reynholm\FileUtils\Conversor\Csvable;
 
-class ArrayConversor implements FileConversor {
-
-    protected $delimiter = ';';
+class ArrayConversor implements Csvable {
 
     /**
-     * @param string $filePath
+     * @param string|array $origin The origin file or data to convert depending on the implementation
      * @param string $destinationPath
-     * @return string
+     * @param string $delimiter Character to delimite rows
+     * @param string $enclosure Character to enclose strings
+     * @return string The string with the destination path
      */
-    public function toXls($filePath, $destinationPath)
-    {
-        // TODO: Implement toXls() method.
-        throw new \Exception('Not implemented yet');
-    }
-
-    /**
-     * Converts a file into an array
-     * @param   string $filePath
-     * @param   integer $skipRows Number of rows to skip
-     * @return  array
-     */
-    public function toArray($filePath, $skipRows = 0)
-    {
-        // TODO: Implement toArray() method.
-        throw new \Exception('Not implemented yet');
-    }
-
-    /**
-     * Set if the conversion should use the first row as the keys
-     * @param $boolean
-     * @return void
-     */
-    public function setFirstRowAsKeys($boolean)
-    {
-        // TODO: Implement setFirstRowAsKeys() method.
-        throw new \Exception('Not implemented yet');
-    }
-
-    /**
-     * @param string|array $filePath or data
-     * @param string $destinationPath
-     * @return string
-     */
-    public function toCsv($filePath, $destinationPath)
+    public function toCsv($origin, $destinationPath, $delimiter = ';', $enclosure = '"')
     {
         $handle = fopen($destinationPath, 'w');
 
-        foreach ($filePath as $row) {
-            fputcsv($handle, $row, $this->getDelimiter(), '"');
+        foreach ($origin as $row) {
+            fputcsv($handle, $row, $delimiter, $enclosure);
         }
 
         fclose($handle);
@@ -60,19 +26,4 @@ class ArrayConversor implements FileConversor {
         return $destinationPath;
     }
 
-    /**
-     * @param string $delimiter
-     */
-    public function setDelimiter($delimiter)
-    {
-        $this->delimiter = $delimiter;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDelimiter()
-    {
-        return $this->delimiter;
-    }
 }

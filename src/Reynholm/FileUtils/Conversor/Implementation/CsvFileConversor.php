@@ -3,53 +3,26 @@
 namespace Reynholm\FileUtils\Conversor\Implementation;
 
 use PHPExcel_IOFactory;
-use Reynholm\FileUtils\Conversor\FileConversor;
+use Reynholm\FileUtils\Conversor\Arrayable;
+use Reynholm\FileUtils\Conversor\Xlsable;
 
-class CsvFileConversor implements FileConversor {
-
-    protected $delimiter = ';';
-    protected $firstRowAsKeys = false;
+class CsvFileConversor implements Arrayable, Xlsable {
 
     /**
+     * @param string $origin
+     * @param int $skipRows Number of rows to skip
+     * @param bool $firstRowAsKeys
      * @param string $delimiter
+     * @return array
      */
-    public function setDelimiter($delimiter)
-    {
-        $this->delimiter = $delimiter;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDelimiter()
-    {
-        return $this->delimiter;
-    }
-
-    /**
-     * @param boolean $boolean
-     */
-    public function setFirstRowAsKeys($boolean)
-    {
-        $this->firstRowAsKeys = $boolean;
-    }
-
-
-
-    /**
-     * Converts a file to an array
-     * @param   $filePath
-     * @param   integer $skipRows A number of rows to remove from the start
-     * @return  array
-     */
-    public function toArray($filePath, $skipRows = 0)
+    public function toArray($origin, $skipRows = 0, $firstRowAsKeys = false, $delimiter = ';')
     {
         /**
          * Returns associative array or simple array depending on the
          * firstRowAsKeys property
          */
-        $getRows = function($keys, array $row) {
-            if ($this->firstRowAsKeys === true) {
+        $getRows = function($keys, array $row) use ($firstRowAsKeys) {
+            if ($firstRowAsKeys === true) {
                 return array_combine($keys, $row);
             }
             return $row;
@@ -58,13 +31,13 @@ class CsvFileConversor implements FileConversor {
         $data = array();
         $keys = null;
 
-        $handle = fopen($filePath, 'r');
+        $handle = fopen($origin, 'r');
 
-        if ($this->firstRowAsKeys === true) {
-            $keys = fgetcsv($handle, 0, $this->delimiter);
+        if ($firstRowAsKeys === true) {
+            $keys = fgetcsv($handle, 0, $delimiter);
         }
 
-        while ($row = fgetcsv($handle, 0, $this->delimiter)) {
+        while ($row = fgetcsv($handle, 0, $delimiter)) {
             $data[] = $getRows($keys, $row);
         }
 
@@ -74,16 +47,15 @@ class CsvFileConversor implements FileConversor {
     }
 
     /**
-     * @param string $filePath
+     * @param string|array $origin Can be the origin file or an array depending on the implementation
      * @param string $destinationPath
-     * @return string
+     * @return string Returns the destinationPath
      */
-    public function toXls($filePath, $destinationPath)
+    public function toXls($origin, $destinationPath)
     {
         $objReader = $this->getReader('CSV');
-        $objReader->setDelimiter($this->getDelimiter());
 
-        $objPHPExcel = $objReader->load($filePath);
+        $objPHPExcel = $objReader->load($origin);
         $objWriter = $this->getWriter($objPHPExcel, 'Excel5');
         $objWriter->save($destinationPath);
 
@@ -107,14 +79,4 @@ class CsvFileConversor implements FileConversor {
         return PHPExcel_IOFactory::createWriter($objPHPExcel, $format);
     }
 
-    /**
-     * @param string $filePath
-     * @param string $destinationPath
-     * @throws \Exception
-     * @return string
-     */
-    public function toCsv($filePath, $destinationPath)
-    {
-        throw new \Exception('CSV can\'t be converted to CSV');
-    }
 }

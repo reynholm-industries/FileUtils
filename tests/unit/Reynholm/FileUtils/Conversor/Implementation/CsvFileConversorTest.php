@@ -81,9 +81,7 @@ class CsvFileConversorTest extends Test
     public function testCsvIsParsedToArrayWithCommaDelimeter() {
 
         $this->specify("Can convert to array chaging the delimiter character", function() {
-            $this->csvConversor->setDelimiter(",");
-
-            $result = $this->csvConversor->toArray($this->fileDelimitedWithCommaPath);
+            $result = $this->csvConversor->toArray($this->fileDelimitedWithCommaPath, 0, false, ',');
             expect($result)->equals($this->expectedArrayWithTitles);
         });
 
@@ -92,9 +90,7 @@ class CsvFileConversorTest extends Test
     public function testCsvIsParsedWithFirstRowAsKeys() {
 
         $this->specify("Sets the first row as the array keys", function() {
-            $this->csvConversor->setFirstRowAsKeys(true);
-
-            $result = $this->csvConversor->toArray($this->filePath);
+            $result = $this->csvConversor->toArray($this->filePath, 0, true);
             expect($result)->equals($this->expectedArrayWithTitlesAsKeys);
         });
 
