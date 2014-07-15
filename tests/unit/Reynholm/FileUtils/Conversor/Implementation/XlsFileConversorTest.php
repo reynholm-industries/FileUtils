@@ -21,6 +21,7 @@ class XlsFileConversorTest extends Test
     protected $expectedArrayWithoutTitles = array(
         array('data1', 'data2'),
     );
+    protected $expectedJson = '[["title1","title2"],["data1","data2"]]';
 
     /** @var  XlsFileConversor */
     protected $xlsConversor;
@@ -53,7 +54,6 @@ class XlsFileConversorTest extends Test
 
     public function testConvertToArray()
     {
-
         $this->specify("Can convert XLS to Array", function() {
             $result = $this->xlsConversor->toArray($this->simpleXlsFile);
             expect($result)->equals($this->expectedArray);
@@ -63,7 +63,14 @@ class XlsFileConversorTest extends Test
             $result = $this->xlsConversor->toArray($this->simpleXlsFile, 1);
             expect($result)->equals($this->expectedArrayWithoutTitles);
         });
+    }
 
+    public function testConvertToJson()
+    {
+        $this->specify("Can convert XLS to Json", function() {
+            $result = $this->xlsConversor->toJson($this->simpleXlsFile);
+            expect($result)->equals($this->expectedJson);
+        });
     }
 
 }

@@ -7,8 +7,9 @@ use PHPExcel_IOFactory;
 use PHPExcel_Settings;
 use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Csvable;
+use Reynholm\FileUtils\Conversor\Jsonable;
 
-class XlsFileConversor implements Csvable, Arrayable {
+class XlsFileConversor implements Csvable, Arrayable, Jsonable {
 
     function __construct()
     {
@@ -60,7 +61,7 @@ class XlsFileConversor implements Csvable, Arrayable {
     public function toArray($origin, $skipRows = 0, $firstRowAsKeys = false, $delimiter = ';')
     {
         $reader = $this->getReader('Excel5');
-        
+
         /** @var \PHPExcel $phpExcel */
         $phpExcel = $reader->load($origin);
 
@@ -73,4 +74,14 @@ class XlsFileConversor implements Csvable, Arrayable {
 
         return $data;
     }
+
+    /**
+     * @param string|array $origin Depending on the implementation it could be an array or an origin folder
+     * @return string
+     */
+    public function toJson($origin)
+    {
+        return json_encode( $this->toArray($origin) );
+    }
+
 }

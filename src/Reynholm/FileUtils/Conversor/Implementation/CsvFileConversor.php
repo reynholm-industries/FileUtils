@@ -7,18 +7,7 @@ use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Jsonable;
 use Reynholm\FileUtils\Conversor\Xlsable;
 
-/**
- * Class CsvFileConversor
- * @package Reynholm\FileUtils\Conversor\Implementation
- * @property ArrayConversor $arrayConversor
- */
 class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
-
-    protected $arrayConversor;
-
-    public function __construct(ArrayConversor $arrayConversor) {
-        $this->arrayConversor = $arrayConversor;
-    }
 
     /**
      * @param string $origin
@@ -97,6 +86,6 @@ class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
      */
     public function toJson($origin)
     {
-        return $this->arrayConversor->toJson( $this->toArray($origin, 0, true) );
+        return json_encode( $this->toArray($origin, 0, true) );
     }
 }

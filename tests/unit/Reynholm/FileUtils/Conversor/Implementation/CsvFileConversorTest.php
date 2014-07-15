@@ -50,7 +50,7 @@ class CsvFileConversorTest extends Test
 
     protected function _before()
     {
-        $this->csvConversor = new CsvFileConversor( new ArrayConversor() );
+        $this->csvConversor = new CsvFileConversor();
 
         $this->filePath       = getResourcePath('productStock.csv');
         $this->simpleFilePath = getResourcePath('simpleCsvFile.csv');
