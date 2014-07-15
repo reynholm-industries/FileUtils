@@ -5,9 +5,10 @@ namespace Reynholm\FileUtils\Conversor\Implementation;
 use PHPExcel_CachedObjectStorageFactory;
 use PHPExcel_IOFactory;
 use PHPExcel_Settings;
+use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Csvable;
 
-class XlsFileConversor implements Csvable {
+class XlsFileConversor implements Csvable, Arrayable {
 
     function __construct()
     {
@@ -47,5 +48,29 @@ class XlsFileConversor implements Csvable {
         $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
         $cacheSettings = array( 'memoryCacheSize' => '2GB');
         PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+    }
+
+    /**
+     * @param string $origin
+     * @param int $skipRows Number of rows to skip
+     * @param bool $firstRowAsKeys
+     * @param string $delimiter
+     * @return array
+     */
+    public function toArray($origin, $skipRows = 0, $firstRowAsKeys = false, $delimiter = ';')
+    {
+        $reader = $this->getReader('Excel5');
+        
+        /** @var \PHPExcel $phpExcel */
+        $phpExcel = $reader->load($origin);
+
+        $data = $phpExcel->getActiveSheet()->toArray();
+
+        while ($skipRows > 0) {
+            array_shift($data);
+            $skipRows--;
+        }
+
+        return $data;
     }
 }

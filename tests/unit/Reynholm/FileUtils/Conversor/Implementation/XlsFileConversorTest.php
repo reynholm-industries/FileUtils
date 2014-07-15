@@ -14,6 +14,13 @@ class XlsFileConversorTest extends Test
     use Specify;
 
     protected $simpleXlsFile;
+    protected $expectedArray = array(
+        array('title1', 'title2'),
+        array('data1', 'data2'),
+    );
+    protected $expectedArrayWithoutTitles = array(
+        array('data1', 'data2'),
+    );
 
     /** @var  XlsFileConversor */
     protected $xlsConversor;
@@ -40,13 +47,23 @@ class XlsFileConversorTest extends Test
             $result = $this->xlsConversor->toCsv($this->simpleXlsFile, $temporaryFile);
             $resultArray = $this->csvConversor->toArray($result);
 
-            $expectedArray = array(
-              array('title1', 'title2'),
-              array('data1', 'data2'),
-            );
-
-            expect($resultArray)->equals($expectedArray);
+            expect($resultArray)->equals($this->expectedArray);
         });
+    }
+
+    public function testConvertToArray()
+    {
+
+        $this->specify("Can convert XLS to Array", function() {
+            $result = $this->xlsConversor->toArray($this->simpleXlsFile);
+            expect($result)->equals($this->expectedArray);
+        });
+
+        $this->specify("Can convert XLS to Array and skip rows", function() {
+            $result = $this->xlsConversor->toArray($this->simpleXlsFile, 1);
+            expect($result)->equals($this->expectedArrayWithoutTitles);
+        });
+
     }
 
 }
