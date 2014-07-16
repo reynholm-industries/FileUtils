@@ -89,7 +89,7 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
                 $newData[] = array_combine($keys, $row);
             }
 
-//            $data = $newData;
+            $data = $newData;
         }
 
         while ($skipRows > 0) {
@@ -104,7 +104,6 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
      * @param string|array $origin Depending on the implementation it could be an array or an origin folder
      * @param bool $useFirstRowAsKeys
      * @return string
-     * @todo implement $useFirstRowAsKeys
      */
     public function toJson($origin, $useFirstRowAsKeys = false)
     {

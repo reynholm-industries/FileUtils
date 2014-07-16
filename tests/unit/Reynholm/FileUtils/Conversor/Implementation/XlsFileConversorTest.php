@@ -87,9 +87,8 @@ class XlsFileConversorTest extends Test
         });
 
         $this->specify("Can convert XLS to Array using first row as keys", function() {
-            $this->markTestIncomplete('Pending');
-            $result = $this->xlsConversor->toArray($this->simpleXlsFile, 1, true);
-            expect($result)->equals($this->expectedArray);
+            $result = $this->xlsConversor->toArray($this->simpleXlsFile, 0, true);
+            expect($result)->equals($this->expectedArrayWithKeys);
         });
 
         $this->specify('Throws exception when the origin file is not found', function() {
@@ -109,7 +108,6 @@ class XlsFileConversorTest extends Test
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
 
         $this->specify("Can convert XLS to Json using first row as keys", function() {
-            $this->markTestIncomplete('Pending');
             $result = $this->xlsConversor->toJson($this->simpleXlsFile, true);
             expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
         });
