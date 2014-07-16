@@ -28,7 +28,7 @@ $array = $this->xlsConversor->toArray($xlsFile);
 
 Check the unit tests folder for more examples.
 
-To run the tests use the
+To run the tests use the command
 ```shell
-command vendor\bin\codecept run unit
+vendor\bin\codecept run unit
 ```
