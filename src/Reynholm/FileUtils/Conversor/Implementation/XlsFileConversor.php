@@ -8,6 +8,7 @@ use PHPExcel_Settings;
 use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Csvable;
 use Reynholm\FileUtils\Conversor\Exception\FileNotFoundException;
+use Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException;
 use Reynholm\FileUtils\Conversor\Jsonable;
 
 class XlsFileConversor implements Csvable, Arrayable, Jsonable {
@@ -23,6 +24,7 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
      * @param bool $keysAsFirstRow
      * @param string $delimiter Character to delimite rows
      * @param string $enclosure Character to enclose strings
+     * @throws \Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException
      * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
      * @return string The string with the destination path
      */
@@ -30,6 +32,10 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
     {
         if ( ! is_file($origin) ) {
             throw new FileNotFoundException($origin . ' not found');
+        }
+
+        if ($keysAsFirstRow === true) {
+            throw new OptionNotSupportedException();
         }
 
         $reader = $this->getReader('Excel5');

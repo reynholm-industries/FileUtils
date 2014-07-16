@@ -1,3 +1,7 @@
+coverage:
+    enabled: true
+    include:
+        - src/*
 actor: Tester
 paths:
     tests: tests

@@ -60,21 +60,10 @@ class XlsFileConversorTest extends Test
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
 
 
-        $this->specify("Can convert an XLS to a CSV using keys as first rows", function() {
-
-            $this->markTestIncomplete('Is not working yet');
-
+        $this->specify("Using first key as row is not appropriate for XLS", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
-            $result = $this->xlsConversor->toCsv($this->simpleXlsFile, $temporaryFile, true);
-
-            $resultArray = $this->csvConversor->toArray($result, 0, false);
-            expect($resultArray)->equals(
-                array(
-                    array('title1', 'title2'),
-                    array('data1',  'data2'),
-                )
-            );
-        });
+            $this->xlsConversor->toCsv($this->simpleXlsFile, $temporaryFile, true);
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException']);
     }
 
     public function testXlsToArray()

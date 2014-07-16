@@ -11,6 +11,7 @@ interface Csvable {
      * @param string $delimiter Character to delimite rows
      * @param string $enclosure Character to enclose string
      * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
+     * @throws \Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException
      * @return string The string with the destination path
      */
     public function toCsv($origin, $destinationPath, $keysAsFirstRow = false, $delimiter = ';', $enclosure = '"');
