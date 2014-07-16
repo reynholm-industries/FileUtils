@@ -25,7 +25,6 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
      * @param string $enclosure Character to enclose strings
      * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
      * @return string The string with the destination path
-     * @todo Implement keysAsFirstRow
      */
     public function toCsv($origin, $destinationPath, $keysAsFirstRow = false, $delimiter = ';', $enclosure = '"')
     {

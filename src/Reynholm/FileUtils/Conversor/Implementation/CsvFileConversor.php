@@ -68,7 +68,6 @@ class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
             throw new OptionNotSupportedException('This option is not supported on this implementantion');
         }
 
-        #@todo implement $keysAsFirstRow
         if ( ! is_file($origin) ) {
             throw new FileNotFoundException($origin . ' not found');
         }
@@ -103,7 +102,6 @@ class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
      * @param string|array $origin Depending on the implementation it could be an array or an origin folder
      * @param bool $useFirstRowAsKeys
      * @return string
-     * @todo Implement all
      */
     public function toJson($origin, $useFirstRowAsKeys = false)
     {
