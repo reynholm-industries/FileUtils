@@ -41,7 +41,7 @@ class ArrayConversorTest extends Test
 
     }
 
-    public function testArrayIsConvertedToCsv()
+    public function testArrayToCsv()
     {
         $this->specify("Can convert an array to a CSV", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
@@ -50,10 +50,9 @@ class ArrayConversorTest extends Test
             $resultArray = $this->getCsvAsArray($result);
             expect($resultArray)->equals($this->exampleArray);
         });
-
     }
 
-    public function testCanBeConvertedToXls()
+    public function testArrayToXls()
     {
         $this->specify("Can convert an array to XLS", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
@@ -62,7 +61,7 @@ class ArrayConversorTest extends Test
         });
     }
 
-    public function testCanBeConvertedToJson()
+    public function testArrayToJson()
     {
         $this->specify("Can be converted to JSON", function() {
             $input = array(1, 2, 3);

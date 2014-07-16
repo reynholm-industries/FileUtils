@@ -7,6 +7,7 @@ use PHPExcel_IOFactory;
 use PHPExcel_Settings;
 use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Csvable;
+use Reynholm\FileUtils\Conversor\Exception\FileNotFoundException;
 use Reynholm\FileUtils\Conversor\Jsonable;
 
 class XlsFileConversor implements Csvable, Arrayable, Jsonable {
@@ -21,10 +22,15 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
      * @param string $destinationPath
      * @param string $delimiter Character to delimite rows
      * @param string $enclosure Character to enclose strings
+     * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
      * @return string The string with the destination path
      */
     public function toCsv($origin, $destinationPath, $delimiter = ';', $enclosure = '"')
     {
+        if ( ! is_file($origin) ) {
+            throw new FileNotFoundException($origin . ' not found');
+        }
+
         $reader = $this->getReader('Excel5');
         $excel = $reader->load($origin);
 
@@ -56,10 +62,15 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
      * @param int $skipRows Number of rows to skip
      * @param bool $firstRowAsKeys
      * @param string $delimiter
+     * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
      * @return array
      */
     public function toArray($origin, $skipRows = 0, $firstRowAsKeys = false, $delimiter = ';')
     {
+        if ( ! is_file($origin) ) {
+            throw new FileNotFoundException($origin . ' not found');
+        }
+
         $reader = $this->getReader('Excel5');
 
         /** @var \PHPExcel $phpExcel */

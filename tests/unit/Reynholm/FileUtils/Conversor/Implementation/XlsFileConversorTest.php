@@ -41,7 +41,7 @@ class XlsFileConversorTest extends Test
 
     }
 
-    public function testConvertToCsv()
+    public function testXlsToCsv()
     {
         $this->specify("Can Convert To Csv", function() {
             $temporaryFile = getTemporaryFile();
@@ -50,9 +50,13 @@ class XlsFileConversorTest extends Test
 
             expect($resultArray)->equals($this->expectedArray);
         });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->xlsConversor->toCsv('unexistentFile.csv', getTemporaryFile());
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
-    public function testConvertToArray()
+    public function testXlsToArray()
     {
         $this->specify("Can convert XLS to Array", function() {
             $result = $this->xlsConversor->toArray($this->simpleXlsFile);
@@ -63,14 +67,22 @@ class XlsFileConversorTest extends Test
             $result = $this->xlsConversor->toArray($this->simpleXlsFile, 1);
             expect($result)->equals($this->expectedArrayWithoutTitles);
         });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->xlsConversor->toArray('unexistentFile.csv');
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
-    public function testConvertToJson()
+    public function testXlsToJson()
     {
         $this->specify("Can convert XLS to Json", function() {
             $result = $this->xlsConversor->toJson($this->simpleXlsFile);
             expect($result)->equals($this->expectedJson);
         });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->xlsConversor->toJson('unexistentFile.csv', getTemporaryFile());
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
 }

@@ -5,7 +5,6 @@ namespace unit\Reynholm\FileUtils\Conversor\Implementation;
 use Codeception\Specify;
 use Codeception\TestCase\Test;
 use PHPExcel_IOFactory;
-use Reynholm\FileUtils\Conversor\Implementation\ArrayConversor;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
 
 /**
@@ -63,9 +62,8 @@ class CsvFileConversorTest extends Test
 
     }
 
-    public function testCsvIsParsedToArray()
+    public function testCsvToArray()
     {
-
         $this->specify("Con convert to convert to array", function() {
             $result = $this->csvConversor->toArray($this->filePath);
             expect($result)->equals($this->expectedArrayWithTitles);
@@ -79,18 +77,19 @@ class CsvFileConversorTest extends Test
             expect($result)->equals($this->expectedArrayWithoutTwoFirstRows);
         });
 
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->csvConversor->toArray('unexistentFile.csv');
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
-    public function testCsvIsParsedToArrayWithCommaDelimeter() {
-
+    public function testCsvToArrayWithCommaDelimeter() {
         $this->specify("Can convert to array chaging the delimiter character", function() {
             $result = $this->csvConversor->toArray($this->fileDelimitedWithCommaPath, 0, false, ',');
             expect($result)->equals($this->expectedArrayWithTitles);
         });
-
     }
 
-    public function testCsvIsParsedWithFirstRowAsKeys() {
+    public function testCsvToArrayWithFirstRowAsKeys() {
 
         $this->specify("Sets the first row as the array keys", function() {
             $result = $this->csvConversor->toArray($this->filePath, 0, true);
@@ -99,21 +98,29 @@ class CsvFileConversorTest extends Test
 
     }
 
-    public function testCsvIsParsedToXls()
+    public function testCsvToXls()
     {
         $this->specify("Can convert to XLS", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
             $result = $this->csvConversor->toXls($this->filePath, $temporaryFile);
             expect_that($this->excelReader->canRead($result));
         });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->csvConversor->toXls('unexistentFile.csv', getTemporaryFile());
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
-    public function testCsvIsConvertedToJson()
+    public function testCsvToJson()
     {
         $this->specify("Can convert a CSV to Json", function() {
             $result = $this->csvConversor->toJson($this->simpleFilePath);
             expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
         });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->csvConversor->toJson('unexistentFile.csv', getTemporaryFile());
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
     }
 
 }
