@@ -101,10 +101,12 @@ class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
 
     /**
      * @param string|array $origin Depending on the implementation it could be an array or an origin folder
+     * @param bool $useFirstRowAsKeys
      * @return string
+     * @todo Implement all
      */
-    public function toJson($origin)
+    public function toJson($origin, $useFirstRowAsKeys = false)
     {
-        return json_encode( $this->toArray($origin, 0, true) );
+        return json_encode( $this->toArray($origin, 0, $useFirstRowAsKeys) );
     }
 }

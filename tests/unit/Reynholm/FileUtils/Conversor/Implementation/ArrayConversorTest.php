@@ -116,6 +116,18 @@ class ArrayConversorTest extends Test
 
             expect($result2)->equals('{"key1":"value1","key2":2}');
         });
+
+        $this->specify("Can be converted to JSON using first row as keys", function() {
+            $data = array(
+                array('key1',   'key2'),
+                array('value1', 'value2'),
+            );
+            $expectedJson = '[{"key1":"value1","key2":"value2"}]';
+
+            $result2 = $this->arrayConversor->toJson($data, true);
+
+            expect($result2)->equals($expectedJson);
+        });
     }
 
     protected function getCsvAsArray($filePath) {

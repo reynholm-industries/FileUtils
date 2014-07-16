@@ -21,6 +21,9 @@ class XlsFileConversorTest extends Test
     protected $expectedArrayWithoutTitles = array(
         array('data1', 'data2'),
     );
+    protected $expectedArrayWithKeys = array(
+        array('title1' => 'data1', 'title2' => 'data2'),
+    );
 
     protected $expectedJson = '[["title1","title2"],["data1","data2"]]';
 
@@ -83,6 +86,12 @@ class XlsFileConversorTest extends Test
             expect($result)->equals($this->expectedArrayWithoutTitles);
         });
 
+        $this->specify("Can convert XLS to Array using first row as keys", function() {
+            $this->markTestIncomplete('Pending');
+            $result = $this->xlsConversor->toArray($this->simpleXlsFile, 1, true);
+            expect($result)->equals($this->expectedArray);
+        });
+
         $this->specify('Throws exception when the origin file is not found', function() {
             $this->xlsConversor->toArray('unexistentFile.csv');
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
@@ -98,6 +107,12 @@ class XlsFileConversorTest extends Test
         $this->specify('Throws exception when the origin file is not found', function() {
             $this->xlsConversor->toJson('unexistentFile.csv', getTemporaryFile());
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
+
+        $this->specify("Can convert XLS to Json using first row as keys", function() {
+            $this->markTestIncomplete('Pending');
+            $result = $this->xlsConversor->toJson($this->simpleXlsFile, true);
+            expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
+        });
     }
 
 }

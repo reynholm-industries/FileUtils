@@ -80,6 +80,18 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
 
         $data = $phpExcel->getActiveSheet()->toArray();
 
+        if ($firstRowAsKeys === true) {
+            $keys = array_shift($data);
+
+            $newData = array();
+
+            foreach ($data as $row) {
+                $newData[] = array_combine($keys, $row);
+            }
+
+//            $data = $newData;
+        }
+
         while ($skipRows > 0) {
             array_shift($data);
             $skipRows--;
@@ -90,11 +102,13 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
 
     /**
      * @param string|array $origin Depending on the implementation it could be an array or an origin folder
+     * @param bool $useFirstRowAsKeys
      * @return string
+     * @todo implement $useFirstRowAsKeys
      */
-    public function toJson($origin)
+    public function toJson($origin, $useFirstRowAsKeys = false)
     {
-        return json_encode( $this->toArray($origin) );
+        return json_encode( $this->toArray($origin, 0, $useFirstRowAsKeys) );
     }
 
 }

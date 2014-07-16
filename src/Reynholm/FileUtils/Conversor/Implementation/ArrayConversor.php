@@ -69,10 +69,21 @@ class ArrayConversor implements Csvable, Xlsable, Jsonable {
 
     /**
      * @param string|array $origin Depending on the implementation it could be an array or an origin folder
+     * @param bool $firstRowAsKeys
      * @return string
      */
-    public function toJson($origin)
+    public function toJson($origin, $firstRowAsKeys = false)
     {
+        if ($firstRowAsKeys === true) {
+            $keys = array_shift($origin);
+            $data = array();
+            foreach ($origin as $row) {
+                $data[] = array_combine($keys, $row);
+            }
+
+            $origin = $data;
+        }
+
         return json_encode($origin);
     }
 }

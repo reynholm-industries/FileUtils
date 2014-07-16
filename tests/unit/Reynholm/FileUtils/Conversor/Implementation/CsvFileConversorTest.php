@@ -120,12 +120,17 @@ class CsvFileConversorTest extends Test
     {
         $this->specify("Can convert a CSV to Json", function() {
             $result = $this->csvConversor->toJson($this->simpleFilePath);
-            expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
+            expect($result)->equals('[["title1","title2"],["data1","data2"]]');
         });
 
         $this->specify('Throws exception when the origin file is not found', function() {
             $this->csvConversor->toJson('unexistentFile.csv', getTemporaryFile());
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
+
+        $this->specify("Can convert a CSV to Json using first row as keys", function() {
+            $result = $this->csvConversor->toJson($this->simpleFilePath, true);
+            expect($result)->equals('[{"title1":"data1","title2":"data2"}]');
+        });
     }
 
 }
