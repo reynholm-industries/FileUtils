@@ -29,6 +29,17 @@ class ArrayConversorTest extends Test
         array('030',    'PRODUCT 3', 'BRAND 3', '1301518', 'AGOTADO')
     );
 
+    protected $exampleArrayWithKeys = array(
+        array('key1' => 'value1', 'key2' => 'value2'),
+        array('key1' => 'value3', 'key2' => 'value4'),
+    );
+
+    protected $expectedExampleArrayWithKeys = array(
+        array('key1',   'key2'),
+        array('value1', 'value2'),
+        array('value3', 'value4'),
+    );
+
     protected function _before()
     {
         $this->arrayConversor = new ArrayConversor();
@@ -49,6 +60,14 @@ class ArrayConversorTest extends Test
 
             $resultArray = $this->getCsvAsArray($result);
             expect($resultArray)->equals($this->exampleArray);
+        });
+
+        $this->specify("Can convert an array to a CSV using keys as first rows", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $result = $this->arrayConversor->toCsv($this->exampleArrayWithKeys, $temporaryFile, true);
+
+            $resultArray = $this->csvConversor->toArray($result, 0, false);
+            expect($resultArray)->equals($this->expectedExampleArrayWithKeys);
         });
     }
 

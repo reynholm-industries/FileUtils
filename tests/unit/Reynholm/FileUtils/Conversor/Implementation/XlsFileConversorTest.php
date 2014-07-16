@@ -21,6 +21,7 @@ class XlsFileConversorTest extends Test
     protected $expectedArrayWithoutTitles = array(
         array('data1', 'data2'),
     );
+
     protected $expectedJson = '[["title1","title2"],["data1","data2"]]';
 
     /** @var  XlsFileConversor */
@@ -54,6 +55,20 @@ class XlsFileConversorTest extends Test
         $this->specify('Throws exception when the origin file is not found', function() {
             $this->xlsConversor->toCsv('unexistentFile.csv', getTemporaryFile());
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
+
+
+        $this->specify("Can convert an XLS to a CSV using keys as first rows", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $result = $this->xlsConversor->toCsv($this->simpleXlsFile, $temporaryFile, true);
+
+            $resultArray = $this->csvConversor->toArray($result, 0, false);
+            expect($resultArray)->equals(
+                array(
+                    array('title1', 'title2'),
+                    array('data1',  'data2'),
+                )
+            );
+        });
     }
 
     public function testXlsToArray()
