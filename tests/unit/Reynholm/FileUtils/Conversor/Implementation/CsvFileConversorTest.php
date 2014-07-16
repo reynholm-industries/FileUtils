@@ -109,6 +109,11 @@ class CsvFileConversorTest extends Test
         $this->specify('Throws exception when the origin file is not found', function() {
             $this->csvConversor->toXls('unexistentFile.csv', getTemporaryFile());
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
+
+        $this->specify("Can convert to XLS using keys as first row", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $this->csvConversor->toXls($this->filePath, $temporaryFile, true);
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException']);
     }
 
     public function testCsvToJson()

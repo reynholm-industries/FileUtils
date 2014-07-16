@@ -38,10 +38,16 @@ class ArrayConversor implements Csvable, Xlsable, Jsonable {
     /**
      * @param string|array $origin Can be the origin file or an array depending on the implementation
      * @param string $destinationPath
+     * @param bool $keysAsFirstRow
      * @return string Returns the destinationPath
      */
-    public function toXls($origin, $destinationPath)
+    public function toXls($origin, $destinationPath, $keysAsFirstRow = false)
     {
+        if ($keysAsFirstRow === true) {
+            $keys = array_keys(current($origin));
+            array_unshift($origin, $keys);
+        }
+
         #@todo Remove the new. Not testeable
         $xls = new \PHPExcel();
         $xls->getActiveSheet()->fromArray($origin, null, 'A1');

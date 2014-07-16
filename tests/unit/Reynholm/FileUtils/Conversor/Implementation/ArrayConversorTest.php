@@ -7,11 +7,13 @@ use Codeception\TestCase\Test;
 use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Implementation\ArrayConversor;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
+use Reynholm\FileUtils\Conversor\Implementation\XlsFileConversor;
 
 /**
  * Class ArrayConversorTest
  * @property ArrayConversor $arrayConversor
  * @property CsvFileConversor $csvConversor
+ * @property XlsFileConversor $xlsConversor
  * @property \PHPExcel_Reader_Excel5 $excelReader
  */
 class ArrayConversorTest extends Test
@@ -20,6 +22,7 @@ class ArrayConversorTest extends Test
 
     protected $arrayConversor;
     protected $csvConversor;
+    protected $xlsConversor;
     protected $excelReader;
 
     protected $exampleArray = array(
@@ -44,7 +47,8 @@ class ArrayConversorTest extends Test
     {
         $this->arrayConversor = new ArrayConversor();
         $this->csvConversor   = new CsvFileConversor(new ArrayConversor());
-        $this->excelReader = PHPExcel_IOFactory::createReader('Excel5');
+        $this->xlsConversor   = new XlsFileConversor();
+        $this->excelReader    = PHPExcel_IOFactory::createReader('Excel5');
     }
 
     protected function _after()
@@ -77,6 +81,25 @@ class ArrayConversorTest extends Test
             $temporaryFile = tempnam('/temp', 'TMP');
             $result = $this->arrayConversor->toXls(array('1', '2', '3'), $temporaryFile);
             expect_that($this->excelReader->canRead($result));
+        });
+
+        $this->specify("Can convert an array to XLS using keys as first rows", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $data = array(
+                array('key1' => 'value1', 'key2' => 'value2'),
+                array('key1' => 'value3', 'key2' => 'value4'),
+            );
+            $expectedArray = array(
+                array('key1', 'key2'),
+                array('value1', 'value2'),
+                array('value3', 'value4'),
+            );
+
+            $result = $this->arrayConversor->toXls($data, $temporaryFile, true);
+            expect_that($this->excelReader->canRead($result));
+
+            $resultArray = $this->xlsConversor->toArray($result);
+            expect($resultArray)->equals($expectedArray);
         });
     }
 

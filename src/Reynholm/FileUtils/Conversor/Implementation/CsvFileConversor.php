@@ -5,6 +5,7 @@ namespace Reynholm\FileUtils\Conversor\Implementation;
 use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Arrayable;
 use Reynholm\FileUtils\Conversor\Exception\FileNotFoundException;
+use Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException;
 use Reynholm\FileUtils\Conversor\Jsonable;
 use Reynholm\FileUtils\Conversor\Xlsable;
 
@@ -56,11 +57,18 @@ class CsvFileConversor implements Arrayable, Xlsable, Jsonable {
     /**
      * @param string|array $origin Can be the origin file or an array depending on the implementation
      * @param string $destinationPath
-     * @throws FileNotFoundException
+     * @param bool $keysAsFirstRow
+     * @throws \Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException
+     * @throws \Reynholm\FileUtils\Conversor\Exception\FileNotFoundException
      * @return string Returns the destinationPath
      */
-    public function toXls($origin, $destinationPath)
+    public function toXls($origin, $destinationPath, $keysAsFirstRow = false)
     {
+        if ($keysAsFirstRow === true) {
+            throw new OptionNotSupportedException('This option is not supported on this implementantion');
+        }
+
+        #@todo implement $keysAsFirstRow
         if ( ! is_file($origin) ) {
             throw new FileNotFoundException($origin . ' not found');
         }
