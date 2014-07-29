@@ -3,10 +3,11 @@
 namespace unit\Reynholm\FileUtils\Conversor\Implementation;
 
 use Codeception\Specify;
-use Codeception\TestCase\Test;
 use Reynholm\FileUtils\Conversor\Implementation\JsonConversor;
+use unit\BaseConversorTest;
+use unit\BaseUnitTests;
 
-class JsonConversorTest extends Test {
+class JsonConversorTestTest extends BaseConversorTest {
 
     use Specify;
 

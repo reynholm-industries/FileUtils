@@ -5,3 +5,4 @@ vendor/
 #JetBrains
 /.idea
 tests/_output/*
+*.iml

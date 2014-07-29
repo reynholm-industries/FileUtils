@@ -3,17 +3,16 @@
 namespace unit\Reynholm\FileUtils\Conversor\Implementation;
 
 use Codeception\Specify;
-use Codeception\TestCase\Test;
 use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Implementation\CsvFileConversor;
+use unit\BaseConversorTest;
 
 /**
- * Class CsvFileConversorTest
+ * Class CsvFileConversorTestTest
  * @property CsvFileConversor $csvConversor
  * @property string $filePath
- * @property \PHPExcel_Reader_Excel5 $excelReader
  */
-class CsvFileConversorTest extends Test
+class CsvFileConversorTestTest extends BaseConversorTest
 {
     use Specify;
 
@@ -21,7 +20,6 @@ class CsvFileConversorTest extends Test
     protected $filePath;
     protected $simpleFilePath;
     protected $fileDelimitedWithCommaPath;
-    protected $excelReader;
 
     protected $expectedArrayWithTitles = array(
         array('CODIGO', 'NOMBRE',    'MARCA',   'MEDIDA',  'STOCK'),
@@ -103,7 +101,7 @@ class CsvFileConversorTest extends Test
         $this->specify("Can convert to XLS", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
             $result = $this->csvConversor->toXls($this->filePath, $temporaryFile);
-            expect_that($this->excelReader->canRead($result));
+            expect_that($this->canreadXls($result));
         });
 
         $this->specify('Throws exception when the origin file is not found', function() {
@@ -113,6 +111,24 @@ class CsvFileConversorTest extends Test
         $this->specify("Can convert to XLS using keys as first row", function() {
             $temporaryFile = tempnam('/temp', 'TMP');
             $this->csvConversor->toXls($this->filePath, $temporaryFile, true);
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException']);
+    }
+
+    public function testCsvToXlsx()
+    {
+        $this->specify("Can convert to XLSX", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $result = $this->csvConversor->toXlsx($this->filePath, $temporaryFile);
+            expect($this->canReadXlsx($result))->true();
+        });
+
+        $this->specify('Throws exception when the origin file is not found', function() {
+            $this->csvConversor->toXlsx('unexistentFile.csv', getTemporaryFile());
+        }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\FileNotFoundException']);
+
+        $this->specify("Can convert to XLS using keys as first row", function() {
+            $temporaryFile = tempnam('/temp', 'TMP');
+            $this->csvConversor->toXlsx($this->filePath, $temporaryFile, true);
         }, ['throws' => 'Reynholm\FileUtils\Conversor\Exception\OptionNotSupportedException']);
     }
 

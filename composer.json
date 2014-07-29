@@ -29,6 +29,9 @@
         "codeception/verify": "dev-master"
     },
     "autoload": {
+        "classmap": [
+            "tests"
+        ],
         "psr-0": {
             "": "src/"
         }

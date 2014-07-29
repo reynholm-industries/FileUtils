@@ -6,8 +6,9 @@ use PHPExcel_IOFactory;
 use Reynholm\FileUtils\Conversor\Csvable;
 use Reynholm\FileUtils\Conversor\Jsonable;
 use Reynholm\FileUtils\Conversor\Xlsable;
+use Reynholm\FileUtils\Conversor\Xlsxable;
 
-class ArrayConversor implements Csvable, Xlsable, Jsonable {
+class ArrayConversor implements Csvable, Xlsable, Jsonable, Xlsxable {
 
     /**
      * @param string|array $origin The origin file or data to convert depending on the implementation
@@ -43,6 +44,21 @@ class ArrayConversor implements Csvable, Xlsable, Jsonable {
      */
     public function toXls($origin, $destinationPath, $keysAsFirstRow = false)
     {
+        return $this->toExcel($origin, $destinationPath, $keysAsFirstRow, 'Excel5');
+    }
+
+    /**
+     * @param string|array $origin Can be the origin file or an array depending on the implementation
+     * @param string $destinationPath
+     * @param bool $keysAsFirstRow
+     * @return string Returns the destinationPath
+     */
+    public function toXlsx($origin, $destinationPath, $keysAsFirstRow = false)
+    {
+        return $this->toExcel($origin, $destinationPath, $keysAsFirstRow, 'Excel2007');
+    }
+
+    protected function toExcel($origin, $destinationPath, $keysAsFirstRow, $fileType) {
         if ($keysAsFirstRow === true) {
             $keys = array_keys(current($origin));
             array_unshift($origin, $keys);
@@ -52,7 +68,7 @@ class ArrayConversor implements Csvable, Xlsable, Jsonable {
         $xls = new \PHPExcel();
         $xls->getActiveSheet()->fromArray($origin, null, 'A1');
 
-        $objWriter = $this->getWriter($xls, 'Excel5');
+        $objWriter = $this->getWriter($xls, $fileType);
         $objWriter->save($destinationPath);
 
         return $destinationPath;

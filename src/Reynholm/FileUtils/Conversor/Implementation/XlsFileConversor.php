@@ -13,9 +13,15 @@ use Reynholm\FileUtils\Conversor\Jsonable;
 
 class XlsFileConversor implements Csvable, Arrayable, Jsonable {
 
+    private $fileType = 'Excel5';
+
     function __construct()
     {
         $this->setPhpExcelCache();
+    }
+
+    protected function setFileType($type) {
+        $this->fileType = $type;
     }
 
     /**
@@ -38,7 +44,7 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
             throw new OptionNotSupportedException();
         }
 
-        $reader = $this->getReader('Excel5');
+        $reader = $this->getReader($this->fileType);
         $excel = $reader->load($origin);
 
         /** @var \PHPExcel_Writer_CSV $writer */
@@ -78,7 +84,7 @@ class XlsFileConversor implements Csvable, Arrayable, Jsonable {
             throw new FileNotFoundException($origin . ' not found');
         }
 
-        $reader = $this->getReader('Excel5');
+        $reader = $this->getReader($this->fileType);
 
         /** @var \PHPExcel $phpExcel */
         $phpExcel = $reader->load($origin);
