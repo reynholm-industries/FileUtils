@@ -26,7 +26,8 @@
     "require-dev": {
         "codeception/codeception": "2.0.2",
         "codeception/specify": "dev-master",
-        "codeception/verify": "dev-master"
+        "codeception/verify": "dev-master",
+        "codeception/aspect-mock": "0.4.2"
     },
     "autoload": {
         "classmap": [
