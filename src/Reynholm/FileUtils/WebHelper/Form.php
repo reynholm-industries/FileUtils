@@ -11,7 +11,7 @@ use Reynholm\FileUtils\Factory\Exception\ExtensionNotFoundException;
  * Class Form
  * @package Reynholm\FileUtils\WebHelper
  *
- * This class is supposed to help you when uploading csv, xls or xlsx files
+ * This class helps you when uploading csv, xls or xlsx files
  * so you can work with them without have to check what kind of file it is.
  */
 class Form
