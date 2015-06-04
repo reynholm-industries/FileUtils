@@ -7,7 +7,7 @@ File Utils
 Multiple tools for working with files
 
 # Abandoned!
-This package is abandoned as you can see on packagist. I moved to python and I have no time for keeping this repo up to date with Laravel. Feel free to fork it and maintaining it yourself.
+This package is abandoned as you can see on packagist. I moved to python and I have no time to keep working on it. At least at this time.
 
 ##Examples:
 
